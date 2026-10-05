@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jaiden Jun — Game Programming Student</title>
+<meta name="description" content="College game development student building games in Unreal Engine 5 with Blueprints and C++. Seeking internships.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* ============ EDIT ME: colors ============ */
+  :root{
+    --bg:#0b0d14; --panel:#131724; --panel2:#1a2033; --line:#262d45;
+    --text:#e8ebf5; --muted:#8c93ad;
+    --accent:#7cf5c0; --accent2:#ff6bd6; --accent3:#ffd166;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',system-ui,sans-serif;line-height:1.6;overflow-x:hidden}
+  body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(600px 400px at 85% -5%,rgba(255,107,214,.12),transparent 70%),
+      radial-gradient(700px 500px at -5% 20%,rgba(124,245,192,.10),transparent 70%);}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 24px;position:relative;z-index:1}
+
+  /* nav */
+  nav{position:sticky;top:0;z-index:10;backdrop-filter:blur(12px);background:rgba(11,13,20,.75);border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex;justify-content:space-between;align-items:center;height:60px}
+  .logo{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--accent)}
+  .logo span{color:var(--muted)}
+  nav ul{display:flex;gap:26px;list-style:none;font-size:.92rem;color:var(--muted)}
+  nav ul a:hover{color:var(--accent)}
+  @media(max-width:640px){nav ul{gap:14px;font-size:.8rem}}
+
+  /* hero */
+  .hero{padding:90px 0 60px;display:grid;grid-template-columns:1.15fr 1fr;gap:48px;align-items:center}
+  @media(max-width:900px){.hero{grid-template-columns:1fr;padding-top:56px}}
+  .tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent);border:1px solid var(--line);background:var(--panel);padding:5px 12px;border-radius:99px;margin-bottom:22px}
+  .tag i{display:inline-block;width:8px;height:8px;background:var(--accent);border-radius:50%;margin-right:8px;box-shadow:0 0 10px var(--accent);animation:pulse 1.6s infinite}
+  @keyframes pulse{50%{opacity:.3}}
+  h1{font-size:clamp(2.3rem,5.6vw,3.9rem);line-height:1.07;letter-spacing:-.03em;margin-bottom:20px}
+  h1 em{font-style:normal;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .lead{color:var(--muted);font-size:1.1rem;max-width:540px;margin-bottom:30px}
+  .lead strong{color:var(--text)}
+  .btns{display:flex;gap:12px;flex-wrap:wrap}
+  .btn{padding:12px 22px;border-radius:10px;font-weight:700;font-size:.95rem;border:1px solid var(--line);transition:.2s;display:inline-block}
+  .btn.primary{background:var(--accent);color:#06130d;border-color:var(--accent)}
+  .btn.primary:hover{box-shadow:0 0 28px rgba(124,245,192,.4);transform:translateY(-2px)}
+  .btn.ghost:hover{border-color:var(--accent);color:var(--accent)}
+
+  /* hero "currently" card */
+  .now{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 20px 60px rgba(0,0,0,.45);overflow:hidden;font-family:'JetBrains Mono',monospace;font-size:.82rem}
+  .now header{display:flex;align-items:center;gap:7px;padding:11px 14px;border-bottom:1px solid var(--line);color:var(--muted);font-size:.74rem}
+  .now header i{width:10px;height:10px;border-radius:50%;background:#2c3450;display:inline-block}
+  .now header span{margin-left:8px}
+  .now pre{padding:18px 18px 20px;line-height:1.75;white-space:pre-wrap;color:var(--muted)}
+  .k{color:var(--accent2)} .s{color:var(--accent)} .n{color:var(--accent3)} .c{color:#5a6384}
+
+  /* sections */
+  section{padding:70px 0}
+  .eyebrow{font-family:'JetBrains Mono',monospace;color:var(--accent2);font-size:.82rem;margin-bottom:8px}
+  h2{font-size:clamp(1.7rem,4vw,2.4rem);letter-spacing:-.02em;margin-bottom:36px}
+
+  /* stats */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:10px}
+  @media(max-width:700px){.stats{grid-template-columns:1fr}}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+  .stat b{display:block;font-size:1.9rem;color:var(--accent);font-family:'JetBrains Mono',monospace}
+  .stat span{color:var(--muted);font-size:.88rem}
+
+  /* projects */
+  .projects{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:26px}
+  @media(max-width:520px){.projects{grid-template-columns:1fr}}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;transition:.25s;display:flex;flex-direction:column}
+  .card:hover{transform:translateY(-6px);border-color:var(--accent)}
+  .thumb{aspect-ratio:16/9;position:relative;display:grid;place-items:center;font-family:'JetBrains Mono',monospace;font-size:.82rem;color:rgba(255,255,255,.75)}
+  .t1{background:linear-gradient(135deg,#1f2a5c,#7a2cff 60%,#ff6bd6)}
+  .t2{background:linear-gradient(135deg,#053b32,#18a889 60%,#7cf5c0)}
+  .thumb::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.12) 0 2px,transparent 2px 4px)}
+  .card .body{padding:24px;display:flex;flex-direction:column;gap:14px;flex:1}
+  .card h3{font-size:1.4rem;line-height:1.2}
+  .meta{font-family:'JetBrains Mono',monospace;font-size:.74rem;color:var(--accent2)}
+  .card p{color:var(--muted);font-size:.95rem}
+  .card h4{font-size:.78rem;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:4px}
+  .card ul{padding-left:18px;color:var(--muted);font-size:.92rem;display:flex;flex-direction:column;gap:3px}
+  .chips{display:flex;flex-wrap:wrap;gap:6px}
+  .chip{font-family:'JetBrains Mono',monospace;font-size:.7rem;padding:3px 9px;border-radius:6px;background:var(--panel2);color:var(--accent3);border:1px solid var(--line)}
+  .links{display:flex;gap:16px;font-size:.88rem;font-weight:700;color:var(--accent);margin-top:auto;padding-top:4px}
+  .links a:hover{text-decoration:underline}
+
+  /* skills */
+  .skills{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
+  .skill{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:22px}
+  .skill h3{font-size:1rem;margin-bottom:12px;color:var(--accent)}
+  .skill.learning h3{color:var(--accent3)}
+  .skill ul{list-style:none;display:flex;flex-direction:column;gap:7px;color:var(--muted);font-size:.93rem}
+  .skill li::before{content:"▸ ";color:var(--accent2)}
+
+  /* timeline */
+  .timeline{border-left:2px solid var(--line);padding-left:28px;display:flex;flex-direction:column;gap:34px}
+  .job{position:relative}
+  .job::before{content:"";position:absolute;left:-37px;top:7px;width:14px;height:14px;background:var(--bg);border:3px solid var(--accent);border-radius:50%}
+  .job .when{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--accent2)}
+  .job h3{font-size:1.15rem;margin:2px 0}
+  .job .co{color:var(--muted);margin-bottom:8px}
+  .job ul{padding-left:18px;color:var(--muted);font-size:.95rem}
+
+  /* contact */
+  .contact{text-align:center;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:60px 24px}
+  .contact h2{margin-bottom:12px}
+  .contact p{color:var(--muted);max-width:500px;margin:0 auto 28px}
+  .socials{display:flex;gap:22px;justify-content:center;margin-top:30px;font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--muted);flex-wrap:wrap}
+  .socials a:hover{color:var(--accent)}
+  footer.site{padding:40px 0;text-align:center;color:var(--muted);font-size:.8rem;font-family:'JetBrains Mono',monospace}
+
+  .reveal{opacity:0;transform:translateY(24px);transition:.7s}
+  .reveal.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a href="#top" class="logo">&gt;_ <span>your</span>name</a>
+    <ul>
+      <li><a href="#projects">Games</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="top" class="wrap">
+
+  <!-- ============ HERO ============ -->
+  <div class="hero">
+    <div>
+      <div class="tag"><i></i>Student · Seeking internships</div>
+      <h1>Learning to build games in <em>Unreal Engine 5</em>.</h1>
+      <p class="lead">Hi, I'm <strong>Your Name</strong> — a <strong>[2nd-year]</strong> game development student at <strong>[Your University]</strong>. I build gameplay in UE5 with Blueprints, I'm leveling up my C++, and I've shipped two playable games so far.</p>
+      <div class="btns">
+        <a class="btn primary" href="#projects">Play my games</a>
+        <a class="btn ghost" href="#contact">Get in touch</a>
+      </div>
+    </div>
+
+    <div class="now" aria-label="What I'm working on right now">
+      <header><i></i><i></i><i></i><span>currently.cpp</span></header>
+<pre><span class="c">// what I'm up to right now</span>
+<span class="k">engine</span>    = <span class="s">"Unreal Engine 5"</span>;
+<span class="k">studying</span>  = <span class="s">"[Your Major]"</span>;
+<span class="k">learning</span>  = [
+  <span class="s">"Unreal C++"</span>,
+  <span class="s">"Gameplay Ability System"</span>,
+  <span class="s">"Niagara VFX"</span>
+];
+<span class="k">gamesBuilt</span> = <span class="n">2</span>;
+<span class="k">lookingFor</span> = <span class="s">"Summer internship"</span>;</pre>
+    </div>
+  </div>
+
+  <!-- ============ STATS ============ -->
+  <div class="stats reveal">
+    <div class="stat"><b>2</b><span>Games built in UE5</span></div>
+    <div class="stat"><b>UE5</b><span>Main engine — Blueprints + C++</span></div>
+    <div class="stat"><b>2028</b><span>Expected graduation [edit me]</span></div>
+  </div>
+
+  <!-- ============ PROJECTS ============ -->
+  <section id="projects">
+    <div class="eyebrow">// 01 — my games</div>
+    <h2 class="reveal">Games</h2>
+    <div class="projects">
+
+      <article class="card reveal">
+        <div class="thumb t1">[ screenshot / GIF ]</div>
+        <div class="body">
+          <div class="meta">SOLO PROJECT · 10 WEEKS · UNREAL ENGINE 5</div>
+          <h3>Game One Title</h3>
+          <p>A short description of the game in one or two sentences: the genre, the core mechanic, and what makes it fun to play. Replace this with your own pitch.</p>
+          <div>
+            <h4>What I built</h4>
+            <ul>
+              <li>Player controller and movement in Blueprints</li>
+              <li>Enemy AI with Behavior Trees and perception</li>
+              <li>Health, pickups, and a UMG heads-up display</li>
+            </ul>
+          </div>
+          <div>
+            <h4>What I learned</h4>
+            <ul>
+              <li>Structuring Blueprints so they stay readable</li>
+              <li>Profiling and fixing a frame-rate drop</li>
+            </ul>
+          </div>
+          <div class="chips"><span class="chip">UE5</span><span class="chip">Blueprints</span><span class="chip">Behavior Trees</span><span class="chip">UMG</span></div>
+          <div class="links"><a href="#">Play on itch.io ↗</a><a href="#">Gameplay video ↗</a></div>
+        </div>
+      </article>
+
+      <article class="card reveal">
+        <div class="thumb t2">[ screenshot / GIF ]</div>
+        <div class="body">
+          <div class="meta">TEAM OF 4 · 48-HOUR GAME JAM · UNREAL ENGINE 5</div>
+          <h3>Game Two Title</h3>
+          <p>A short description of your second game: the theme, the idea, and your role on the team. Replace this with your own pitch.</p>
+          <div>
+            <h4>What I built</h4>
+            <ul>
+              <li>Core gameplay loop and scoring</li>
+              <li>Interaction system for picking up and using items</li>
+              <li>Integration of teammates' art and audio into UE5</li>
+            </ul>
+          </div>
+          <div>
+            <h4>What I learned</h4>
+            <ul>
+              <li>Scoping a game to fit a deadline</li>
+              <li>Sharing a project with teammates using Git</li>
+            </ul>
+          </div>
+          <div class="chips"><span class="chip">UE5</span><span class="chip">Blueprints</span><span class="chip">Game Jam</span><span class="chip">Git</span></div>
+          <div class="links"><a href="#">Play on itch.io ↗</a><a href="#">Jam page ↗</a></div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ============ SKILLS ============ -->
+  <section id="skills">
+    <div class="eyebrow">// 02 — toolbox</div>
+    <h2 class="reveal">Skills</h2>
+    <div class="skills">
+      <div class="skill reveal"><h3>Comfortable with</h3><ul><li>Unreal Engine 5 editor</li><li>Blueprints visual scripting</li><li>Character movement & input</li><li>UMG user interfaces</li></ul></div>
+      <div class="skill reveal"><h3>Building up</h3><ul><li>Behavior Trees & AI</li><li>Materials & lighting</li><li>Level blocking & design</li><li>Basic C++ / C#</li></ul></div>
+      <div class="skill learning reveal"><h3>Currently learning</h3><ul><li>Unreal C++ gameplay classes</li><li>Gameplay Ability System</li><li>Niagara VFX</li><li>Multiplayer basics</li></ul></div>
+      <div class="skill reveal"><h3>Tools</h3><ul><li>Git & GitHub</li><li>Visual Studio / Rider</li><li>Blender (basics)</li><li>Trello / Notion</li></ul></div>
+    </div>
+  </section>
+
+  <!-- ============ EDUCATION ============ -->
+  <section id="education">
+    <div class="eyebrow">// 03 — school & growth</div>
+    <h2 class="reveal">Education</h2>
+    <div class="timeline">
+      <div class="job reveal">
+        <div class="when">2024 — 2028 (expected)</div>
+        <h3>B.Sc. [Your Major, e.g. Computer Science / Game Development]</h3>
+        <div class="co">Your University</div>
+        <ul>
+          <li>Relevant coursework: Data Structures, Intro to Game Programming, 3D Modeling, Algorithms.</li>
+          <li>[Optional] GPA, dean's list, or scholarships.</li>
+        </ul>
+      </div>
+      <div class="job reveal">
+        <div class="when">2025</div>
+        <h3>Game Jam Participant</h3>
+        <div class="co">[Jam name / Game Dev Club]</div>
+        <ul><li>Built a complete game with a team in 48 hours using Unreal Engine 5.</li></ul>
+      </div>
+      <div class="job reveal">
+        <div class="when">Ongoing</div>
+        <h3>Self-study</h3>
+        <div class="co">Online courses & documentation</div>
+        <ul><li>Working through Unreal C++ tutorials and building small prototypes each week.</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section id="contact">
+    <div class="contact reveal">
+      <div class="eyebrow">// 04 — press start</div>
+      <h2>Looking for an internship.</h2>
+      <p>I'm a hardworking student who's eager to learn from a team and ship real games. If you're hiring interns or want to chat about a project, I'd love to hear from you.</p>
+      <a class="btn primary" href="mailto:you@example.com">you@example.com</a>
+      <div class="socials">
+        <a href="#">GitHub</a><a href="#">LinkedIn</a><a href="#">itch.io</a><a href="#">Resume (PDF)</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site">© <span id="yr"></span> Your Name · Built by hand with HTML & CSS</footer>
+
+<script>
+const io = new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+document.getElementById('yr').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
